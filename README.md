@@ -1,6 +1,6 @@
 # CatarseMercadopagos
 
-Mercadopagos integration with [Catarse](http://github.com/catarse/catarse) crowdfunding platform
+Mercadopagos integration with [Catarse](http://github.com/carloshlopez/catarse) crowdfunding platform
 
 ## Installation
 
@@ -91,3 +91,7 @@ Remove the admin folder from test/dummy application to prevent a weird active ad
 
 
 This project rocks and uses MIT-LICENSE.
+
+# catarse_mercadopagos
+Catarse payment engine for mercado pagos
+
