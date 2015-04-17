@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-module CatarsePagosonline::Payment
-  class PagosonlineController < ApplicationController
+module CatarseMercadopagos::Payment
+  class MercadopagosController < ApplicationController
     skip_before_filter :verify_authenticity_token, :only => [:notifications]
     skip_before_filter :detect_locale, :only => [:notifications]
     skip_before_filter :set_locale, :only => [:notifications]
@@ -22,12 +22,12 @@ module CatarsePagosonline::Payment
         description: "#{contribution.value} donation to #{contribution.project.name}",
         amount: contribution.value,
         currency: 'COP',
-        response_url: payment_success_pagosonline_url(id: contribution.id),
-        confirmation_url: payment_notifications_pagosonline_url(id: contribution.id),
+        response_url: payment_success_mercadopagos_url(id: contribution.id),
+        confirmation_url: payment_notifications_mercadopagos_url(id: contribution.id),
         language: 'es'
       })
       @form = response.form do |f|
-        "<input type=\"submit\" title=\"Súmate a este proyecto haciendo click aquí\" value=\"APOYA A TRAVÉS DE PAGOS ON LINE\" style=\"padding:10px;background-color: #4CC5D7;color: #fff;border-radius: 10px;cursor: pointer;\"/>"
+        "TENEMOS MERCADO PAGO!!! :)"
       end
     end
 
@@ -36,18 +36,18 @@ module CatarsePagosonline::Payment
       contribution = ::Contribution.find(params[:id])
       begin
         # response = @@gateway.Response.new(params)
-        response = Pagosonline::Response.new(@@gateway, params)
+        response = Mercadopagos::Response.new(@@gateway, params)
         # puts "*****#{response.inspect}***"
         if response.valid?
-          contribution.update_attribute :payment_method, 'PagosOnline'
+          contribution.update_attribute :payment_method, 'Mercadopagos'
           contribution.update_attribute :payment_token, response.transaccion_id
 
           proccess!(contribution, response)
 
           unless response.success?
-            pagosonline_error response.answer_message
+            mercadopagos_error response.answer_message
           else
-            pagosonline_flash_success  
+            mercadopagos_flash_success  
           end
           
 
@@ -59,13 +59,12 @@ module CatarsePagosonline::Payment
 
 
         puts "*******valores del response: #{params[:firma].upcase} debe ser igual a #{signa.upcase} que sale de firmar #{datos}"
-          pagosonline_flash_error
+          mercadopagos_flash_error
           return redirect_to main_app.new_project_contribution_path(contribution.project)  
         end
       rescue Exception => e
-        # ::Airbrake.notify({ :error_class => "PagosOnline Error", :error_message => "PagosOnline Error: #{e.inspect}", :parameters => params}) rescue nil
         Rails.logger.info "--success error-----> #{e.inspect}"
-        pagosonline_flash_error
+        mercadopagos_flash_error
         return redirect_to main_app.new_project_contribution_path(contribution.project)
       end
     end
@@ -73,7 +72,7 @@ module CatarsePagosonline::Payment
     def notifications
       # contribution = current_user.backs.find params[:id]
       contribution = ::Contribution.find(params[:id])
-      response = Pagosonline::Response.new(@@gateway, params)
+      response = Mercadopagos::Response.new(@@gateway, params)
       # response = @@gateway.Response.new(params)
        puts "88888 VAMOS A ENTRAR A VALIDAR esta condicion(#{response.valid?})"
       if response.valid?
@@ -91,7 +90,6 @@ module CatarsePagosonline::Payment
         render status: 404, nothing: true
       end
     rescue Exception => e
-      # ::Airbrake.notify({ :error_class => "PagosOnline Notification Error", :error_message => "PagosOnline Notification Error: #{e.inspect}", :parameters => params}) rescue nil
       Rails.logger.info "--notifications error-----> #{e.inspect}"
       render status: 404, nothing: true
     end
@@ -112,27 +110,27 @@ module CatarsePagosonline::Payment
       end
     end
 
-    def pagosonline_error(error_message)
-      flash[:failure] = t('pagosonline_error', scope: SCOPE) << error_message
+    def mercadopagos_error(error_message)
+      flash[:failure] = t('mercadopagos_error', scope: SCOPE) << error_message
     end
     
-    def pagosonline_flash_error
-      flash[:failure] = t('pagosonline_error', scope: SCOPE)
+    def mercadopagos_flash_error
+      flash[:failure] = t('mercadopagos_error', scope: SCOPE)
     end
 
-    def pagosonline_flash_success
+    def mercadopagos_flash_success
       flash[:success] = t('success', scope: SCOPE)
     end
 
     def setup_gateway
-      if ::Configuration[:pagosonline_key] and ::Configuration[:pagosonline_account_id] and ::Configuration[:pagosonline_test]
-        @@gateway ||= Pagosonline::Client.new({
-          account_id: ::Configuration[:pagosonline_account_id],
-          key: ::Configuration[:pagosonline_key],
-          test: ::Configuration[:pagosonline_test].to_i
+      if ::Configuration[:mercadopagos_key] and ::Configuration[:mercadopagos_account_id] and ::Configuration[:mercadopagos_test]
+        @@gateway ||= Mercadopagos::Client.new({
+          account_id: ::Configuration[:mercadopagos_account_id],
+          key: ::Configuration[:mercadopagos_key],
+          test: ::Configuration[:mercadopagos_test].to_i
         })
       else
-        raise "[PagosOnline] pagosonline_test and pagosonline_key and pagosonline_account_id are required to make requests to PagosOnline"
+        raise "[Mercadopagos] mercadopagos_test and mercadopagos_key and mercadopagos_account_id are required to make requests to Mercadopagos"
       end
     end
 

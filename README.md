@@ -1,13 +1,13 @@
-# CatarsePagosonline
+# CatarseMercadopagos
 
-Pagosonline integration with [Catarse](http://github.com/catarse/catarse) crowdfunding platform
+Mercadopagos integration with [Catarse](http://github.com/catarse/catarse) crowdfunding platform
 
 ## Installation
 
 Add this lines to your Catarse application's Gemfile:
 
-    gem 'pagosonline', git: 'git://github.com/carloshlopez/pagosonline.git'
-    gem 'catarse_pagosonline', git: 'git://github.com/carloshlopez/pagosonline.git'
+    gem 'mercadopagos', git: 'git://github.com/carloshlopez/mercadopagos.git'
+    gem 'catarse_mercadopagos', git: 'git://github.com/carloshlopez/mercadopagos.git'
 
 And then execute:
 
@@ -17,23 +17,23 @@ And then execute:
 
 Configure the routes for your Catarse application. Add the following lines in the routes file (config/routes.rb):
 
-    mount CatarsePagosonline::Engine => "/", :as => "catarse_pagosonline"
+    mount CatarseMercadopagos::Engine => "/", :as => "catarse_mercadopagos"
 
 ### Configurations
 
 Create this configurations into Catarse database:
 
-    pagosonline_test,  pagosonline_key and pagosonline_account_id
+    mercadopagos_test,  mercadopagos_key and mercadopagos_account_id
 
-    pagosonline_test if "1" will be on test mode
-    pagosonline_key you will find it in your pagosonline admin module
-    pagosonline_account_id you'll get it from customer support
+    mercadopagos_test if "1" will be on test mode
+    mercadopagos_key you will find it in your mercadopagos admin module
+    mercadopagos_account_id you'll get it from customer support
 
 In Rails console, run this:
 
-    Configuration.create!(name: "pagosonline_test", value: "1") 
-    Configuration.create!(name: "pagosonline_key", value: "sdf4fs34442")
-    Configuration.create!(name: "pagosonline_account_id", value: "2222")
+    Configuration.create!(name: "mercadopagos_test", value: "1") 
+    Configuration.create!(name: "mercadopagos_key", value: "sdf4fs34442")
+    Configuration.create!(name: "mercadopagos_account_id", value: "2222")
 
   Currencies:
     "COP" -> default
@@ -47,7 +47,7 @@ In Rails console, run this:
 
 Clone the repository:
 
-    $ git clone git://github.com/carloshlopez/catarse_pagosonline.git
+    $ git clone git://github.com/carloshlopez/catarse_mercadopagos.git
 
 Add the catarse code into test/dummy:
 

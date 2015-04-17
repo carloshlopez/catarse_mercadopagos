@@ -1,9 +1,9 @@
-CatarsePagosonline::Engine.routes.draw do
+CatarseMercadopagos::Engine.routes.draw do
   namespace :payment do
-    get '/pagosonline/:id/review' => 'pagosonline#review', :as => 'review_pagosonline'
-    post '/pagosonline/notifications' => 'pagosonline#ipn',  :as => 'ipn_pagosonline'
-    post '/pagosonline/:id/notifications' => 'pagosonline#notifications',  :as => 'notifications_pagosonline'
-    get '/pagosonline/:id/success'       => 'pagosonline#success',        :as => 'success_pagosonline'
-    post '/pagosonline/:id/cancel'        => 'pagosonline#cancel',         :as => 'cancel_pagosonline'
+    get '/mercadopagos/:id/review' => 'mercadopagos#review', :as => 'review_mercadopagos'
+    post '/mercadopagos/notifications' => 'mercadopagos#ipn',  :as => 'ipn_mercadopagos'
+    post '/mercadopagos/:id/notifications' => 'mercadopagos#notifications',  :as => 'notifications_mercadopagos'
+    get '/mercadopagos/:id/success'       => 'mercadopagos#success',        :as => 'success_mercadopagos'
+    post '/mercadopagos/:id/cancel'        => 'mercadopagos#cancel',         :as => 'cancel_mercadopagos'
   end
 end
