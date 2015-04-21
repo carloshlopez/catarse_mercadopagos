@@ -199,7 +199,7 @@ module CatarseMercadopagos::Payment
 
         # else
         #   raise "*****!!!!!!!!!!! [Mercadopagos] mercadopagos_client_id and mercadopagos_client_secret are required to make requests to Mercadopagos"
-        end
+        # end
       rescue Exception => e
         puts "*******!!!!!!!!!!!! Algo pasó malo al crear el @@gateway de mercadopagos !!! #{e.inspect}"
       end
