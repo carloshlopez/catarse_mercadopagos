@@ -168,7 +168,7 @@ module CatarseMercadopagos::Payment
         if status == "success"
           puts "***********ES UN SUCCESS"
           contribution.confirm!
-        else status == "failure"
+        elsif status == "failure"
           puts "*********** ES UN FAILURE"
           contribution.cancel!
         elsif status == "pending"
