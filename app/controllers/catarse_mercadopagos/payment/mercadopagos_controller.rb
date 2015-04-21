@@ -191,14 +191,14 @@ module CatarseMercadopagos::Payment
 
     def setup_gateway
       begin
-        if ::Configuration[:mercadopagos_client_id] and ::Configuration[:mercadopagos_client_secret]
+        # if ::Configuration[:mercadopagos_client_id] and ::Configuration[:mercadopagos_client_secret]
           @@gateway = MercadoPago.new('5726113656322623', '6CkDZgCAIRrtlUMRS7JkQoK6O9QoXAsG')
           puts "&&&&&&&&&&&&&************!!!!!!! #{@@gateway.inspect}"
           accessToken = @@gateway.get_access_token()
           puts "accessToken = #{accessToken}"
 
-        else
-          raise "*****!!!!!!!!!!! [Mercadopagos] mercadopagos_client_id and mercadopagos_client_secret are required to make requests to Mercadopagos"
+        # else
+        #   raise "*****!!!!!!!!!!! [Mercadopagos] mercadopagos_client_id and mercadopagos_client_secret are required to make requests to Mercadopagos"
         end
       rescue Exception => e
         puts "*******!!!!!!!!!!!! Algo pasó malo al crear el @@gateway de mercadopagos !!! #{e.inspect}"
