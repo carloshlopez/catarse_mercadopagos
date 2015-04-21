@@ -34,11 +34,12 @@ gem 'schema_associations'
 gem 'chartkick'
 
 # Payment engines
-gem 'catarse_paypal_express', '~> 2.2.0'
-gem 'catarse_moip', '~> 2.3.1'
+# gem 'catarse_paypal_express', '~> 2.2.0'
+# gem 'catarse_moip', '~> 2.3.1'
 # gem 'payulatam', git: 'git://github.com/danielweinmann/payulatam.git'
 # gem 'catarse_payulatam', git: 'git://github.com/danielweinmann/catarse_payulatam.git'
 # gem 'mercadopagos', git: 'git://github.com/carloshlopez/mercadopagos.git'
+# gem 'catarse_mercadopagos', git: 'git://github.com/carloshlopez/catarse_mercadopagos.git'
 gem 'mercadopago-sdk'
 
 # Decorators
@@ -194,8 +195,9 @@ gem 'chartkick'
 # gem 'catarse_payulatam', git: 'git://github.com/danielweinmann/catarse_payulatam.git'
 # gem 'pagosonline', git: 'git://github.com/sagmor/pagosonline.git'
 # gem 'catarse_pagosonline'
-gem 'pagosonline', git: 'git://github.com/carloshlopez/pagosonline.git'
-gem 'catarse_pagosonline', git: 'git://github.com/carloshlopez/catarse_pagosonline.git'
+# gem 'pagosonline', git: 'git://github.com/carloshlopez/pagosonline.git'
+# gem 'catarse_pagosonline', git: 'git://github.com/carloshlopez/catarse_pagosonline.git'
+# gem 'catarse_mercadopagos', git: 'git://github.com/carloshlopez/catarse_mercadopagos.git'
 
 # Decorators
 gem 'draper'
@@ -249,7 +251,7 @@ gem 'http_accept_language'
 gem 'routing-filter', '~> 0.4.0.pre'
 
 # Payment
-gem 'moip', github: 'catarse/moip-ruby'
+# gem 'moip', github: 'catarse/moip-ruby'
 gem 'httpclient',     '>= 2.2.5'
 
 group :production do

@@ -4,6 +4,8 @@ CatarseMercadopagos::Engine.routes.draw do
     post '/mercadopagos/notifications' => 'mercadopagos#ipn',  :as => 'ipn_mercadopagos'
     post '/mercadopagos/:id/notifications' => 'mercadopagos#notifications',  :as => 'notifications_mercadopagos'
     get '/mercadopagos/:id/success'       => 'mercadopagos#success',        :as => 'success_mercadopagos'
+    get '/mercadopagos/:id/pending'       => 'mercadopagos#pending',        :as => 'pending_mercadopagos'
+    get '/mercadopagos/:id/failure'       => 'mercadopagos#failure',        :as => 'failure_mercadopagos'
     post '/mercadopagos/:id/cancel'        => 'mercadopagos#cancel',         :as => 'cancel_mercadopagos'
   end
 end

@@ -7,21 +7,6 @@ GIT
       railties (>= 3.2)
 
 GIT
-  remote: git://github.com/carloshlopez/catarse_pagosonline.git
-  revision: ffed08bd63dae1d6bac241b662ef2330d6af13b8
-  specs:
-    catarse_pagosonline (0.1.12)
-      pagosonline
-      rails
-
-GIT
-  remote: git://github.com/carloshlopez/pagosonline.git
-  revision: c3b3eb8cd35719349d50a349df89e112b74c1623
-  specs:
-    pagosonline (0.0.1)
-      hashie
-
-GIT
   remote: git://github.com/catarse/catarse_mailchimp
   revision: 2ed4f3931dfa292e5c1c62619772f04e41c68629
   ref: 2ed4f39
@@ -69,11 +54,6 @@ GEM
       erubis (~> 2.7.0)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
-    activemerchant (1.48.0)
-      activesupport (>= 3.2.14, < 5.0.0)
-      builder (>= 2.1.2, < 4.0.0)
-      i18n (>= 0.6.9)
-      nokogiri (~> 1.4)
     activemodel (4.0.2)
       activesupport (= 4.0.2)
       builder (~> 3.1.0)
@@ -116,14 +96,6 @@ GEM
     carrierwave (0.8.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
-    catarse_moip (2.3.6)
-      enumerate_it
-      libxml-ruby (~> 2.6.0)
-      rails (~> 4.0)
-    catarse_paypal_express (2.2.4)
-      activemerchant (>= 1.34.0)
-      rails (~> 4.0)
-      slim-rails
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chartkick (1.3.2)
@@ -181,8 +153,6 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
-    enumerate_it (1.2.6)
-      activesupport (>= 3.0.0)
     erubis (2.7.0)
     excon (0.45.2)
     execjs (2.5.2)
@@ -338,7 +308,6 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.3.0)
       launchy (~> 2.2)
-    libxml-ruby (2.6.0)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -598,9 +567,6 @@ DEPENDENCIES
   carrierwave (~> 0.8.0)
   catarse_mailchimp!
   catarse_mercadopagos!
-  catarse_moip (~> 2.3.1)
-  catarse_pagosonline!
-  catarse_paypal_express (~> 2.2.0)
   chartkick
   coffee-rails (~> 4.0.0)
   compass-960-plugin
@@ -637,7 +603,6 @@ DEPENDENCIES
   omniauth
   omniauth-facebook (= 1.4.0)
   omniauth-twitter
-  pagosonline!
   paper_trail (>= 3.0.0.rc2)
   pg
   pg_search
