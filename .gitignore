@@ -2,6 +2,7 @@
 log/*.log
 pkg/
 test/dummy/
+dump.rdb
 
 *.sublime-workspace
 *.sublime-project

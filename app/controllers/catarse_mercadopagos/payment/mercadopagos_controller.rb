@@ -136,7 +136,7 @@ module CatarseMercadopagos::Payment
       # filters = Array["id"=>params[:id].to_i, "site_id"=>"MCO"]
       # searchResult = @@gateway.search_payment(filters)
       resp = @@gateway.get("/collections/#{params[:id]}", nil, true)
-       puts "Resultados de buscar en mercadopagos #{resp["response"]["status"]} "
+       puts "Resultados de buscar en mercadopagos #{resp.inspect} "
       if resp["response"]["status"] == "approved"
         puts "******* FUE EXITOSO VAMOS A PROCESAR CON SUCCESS :)"
         proccess!(contribution, resp, "success")
