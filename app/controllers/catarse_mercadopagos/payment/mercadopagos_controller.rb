@@ -33,8 +33,8 @@ module CatarseMercadopagos::Payment
                           "pending"=>"#{payment_pending_mercadopagos_url(id: contribution.id)}",
                           "failure"=>"#{payment_failure_mercadopagos_url(id: contribution.id)}"
                          },
-          "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}",
-          "marketplace_fee" => "0.15"
+          "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}"
+          # ,"marketplace_fee" => "0.15"
           ]
         @preference = @@gateway.create_preference(preferenceData)
       rescue Exception => e
