@@ -33,7 +33,7 @@ module CatarseMercadopagos::Payment
                           "pending"=>"#{payment_pending_mercadopagos_url(id: contribution.id)}",
                           "failure"=>"#{payment_failure_mercadopagos_url(id: contribution.id)}"
                          },
-          "notification_url" => "#{payment_notifications_mercadopagos_url(id: contribution.id)}"
+          "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}"
           ]
         @preference = @@gateway.create_preference(preferenceData)
       rescue Exception => e
@@ -79,11 +79,17 @@ module CatarseMercadopagos::Payment
           proccess!(contribution, preference, "pending")
           mercadopagos_error "La transacción no pudo ser confirmada con Mercadopagos"
           redirect_to main_app.new_project_contribution_path(contribution.project)
+        elsif params[:collection_status] == "in_process"
+          contribution.update_attribute :payment_method, 'Mercadopagos'
+          contribution.update_attribute :payment_token, params[:preference_id]
 
+          proccess!(contribution, preference, "waiting")
+          mercadopagos_error "La transacción no pudo ser confirmada con Mercadopagos, se encuentra pendiente."
+          redirect_to main_app.new_project_contribution_path(contribution.project)
         else
           puts "*******Ocurrió un error no es un succes"
           mercadopagos_flash_error
-          return redirect_to main_app.new_project_contribution_path(contribution.project)  
+          return redirect_to main_app.new_project_contribution_path(contribution.project)
         end
       rescue Exception => e
         puts "--*******************pending page error-----> #{e.inspect}"
@@ -104,7 +110,13 @@ module CatarseMercadopagos::Payment
           proccess!(contribution, preference, "failure")
           mercadopagos_error "La transacción CANCELADA por Mercadopagos"
           redirect_to main_app.new_project_contribution_path(contribution.project)
+        elsif params[:collection_status] == "in_process"
+          contribution.update_attribute :payment_method, 'Mercadopagos'
+          contribution.update_attribute :payment_token, params[:preference_id]
 
+          proccess!(contribution, preference, "waiting")
+          mercadopagos_error "La transacción no pudo ser confirmada con Mercadopagos, se encuentra pendiente."
+          redirect_to main_app.new_project_contribution_path(contribution.project)
         else
           puts "*******Ocurrió un error no es un succes"
           mercadopagos_flash_error
@@ -119,37 +131,43 @@ module CatarseMercadopagos::Payment
 
     def notifications
       # contribution = current_user.backs.find params[:id]
-      contribution = ::Contribution.find(params[:id])
+      contribution = ::Contribution.find(params[:id_conribution])
 
-      filters = Array["id"=>params[:preference_id], "site_id"=>"MCO"]
-      searchResult = @@gateway.search_payment(filters)
-
-       puts "Resultados de buscar en mercadopagos #{searchResult.inspect} "
-      if response.valid?
-        puts "******* VAMOS A VALIDAR :)"
-        proccess!(contribution, response)
+      # filters = Array["id"=>params[:id].to_i, "site_id"=>"MCO"]
+      # searchResult = @@gateway.search_payment(filters)
+      resp = @@gateway.get("/collections/#{params[:id]}", nil, true)
+       puts "Resultados de buscar en mercadopagos #{resp["response"]["status"]} "
+      if resp["response"]["status"] == "approved"
+        puts "******* FUE EXITOSO VAMOS A PROCESAR CON SUCCESS :)"
+        proccess!(contribution, resp, "success")
+        render status: 200, nothing: true
+      elsif resp["status"] == "rejected" or resp["status"] == "cancelled"
+        puts "******* FUE FALLIDO VAMOS A PROCESAR CON FAILURE :)"
+        proccess!(contribution, resp, "failure")
+        render status: 200, nothing: true
+      elsif resp["status"] == "pending"
+        puts "******* FUE PENDING VAMOS A PROCESAR CON PENDING :)"
+        proccess!(contribution, resp, "pending")
+        render status: 200, nothing: true
+      elsif resp["status"] == "in_process"
+        puts "******* FUE INCIERTO VAMOS A PROCESAR CON WAITING :)"
+        proccess!(contribution, resp, "waiting")
         render status: 200, nothing: true
       else
-        puts "************ NO ES VALIDA LA FIRMA"
-        datos = [response.client.key,response.client.account_id, response.reference,("%.2f" % response.amount), response.currency, response.state_code].join("~")
-        signa = Digest::MD5.hexdigest(datos)
-
-
-        puts "*******valores del response: #{params[:firma].upcase} debe ser igual a #{signa.upcase} que sale de firmar #{datos}"
-
+        puts "************ NO entendemos el mensaje"
         render status: 404, nothing: true
       end
     rescue Exception => e
-      Rails.logger.info "--notifications error-----> #{e.inspect}"
+      puts "Error --notifications error-----> #{e.inspect}"
       render status: 404, nothing: true
     end
 
     protected
 
-    def proccess!(contribution, response, status)
+    def proccess!(contribution, resp, status)
       begin
         notification = contribution.payment_notifications.new({
-          extra_data: response
+          extra_data: resp
         })
       rescue Exception => e
         puts "Error en enviar la notificación!! #{e.inspect}"
@@ -173,7 +191,10 @@ module CatarseMercadopagos::Payment
           contribution.cancel!
         elsif status == "pending"
           puts "******** ES UN PENDING"
-          contribution.pendent!
+          contribution.pending!
+        elsif status == "waiting"
+          puts "******** ES UN WAITING"
+          contribution.waiting!
         end
     end
 
