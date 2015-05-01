@@ -23,17 +23,10 @@ Configure the routes for your Catarse application. Add the following lines in th
 
 Create this configurations into Catarse database:
 
-    mercadopagos_test,  mercadopagos_key and mercadopagos_account_id
-
-    mercadopagos_test if "1" will be on test mode
-    mercadopagos_key you will find it in your mercadopagos admin module
-    mercadopagos_account_id you'll get it from customer support
-
 In Rails console, run this:
 
-    Configuration.create!(name: "mercadopagos_test", value: "1") 
-    Configuration.create!(name: "mercadopagos_key", value: "sdf4fs34442")
-    Configuration.create!(name: "mercadopagos_account_id", value: "2222")
+    Configuration.create!(name: "mercadopagos_client_secret", value: "111111") 
+    Configuration.create!(name: "mercadopagos_client_id", value: "sdf4fs34442")
 
   Currencies:
     "COP" -> default
