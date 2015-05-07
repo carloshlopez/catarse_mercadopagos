@@ -260,18 +260,18 @@ module CatarseMercadopagos::Payment
       mpc.access_token = resp['response']['access_token']
       mpc.refresh_token = resp['response']['refresh_token']
       mpc.save!
-       preferenceData = Hash["items" =>
-          Array(
-            Array[
-           "title"=>"Aporte a la campaña #{contribution.project.name} por #{contribution.value}",
-           "quantity"=>1,
-           "description" => "Esta transacción es por el aporte de #{current_user.name} a la campaña #{contribution.project.name} por un valor de #{contribution.value}",
-           "unit_price"=> contribution.value.to_f,
-           "currency_id"=>"COP"]),
-          "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}"
-          ]
-        # @@gateway.create_preference(preferenceData)
-        @@gateway.post("/checkout/preferences?access_token=#{mpc.access_token}", preferenceData)
+       # preferenceData = Hash["items" =>
+       #    Array(
+       #      Array[
+       #     "title"=>"Aporte a la campaña #{contribution.project.name} por #{contribution.value}",
+       #     "quantity"=>1,
+       #     "description" => "Esta transacción es por el aporte de #{current_user.name} a la campaña #{contribution.project.name} por un valor de #{contribution.value}",
+       #     "unit_price"=> contribution.value.to_f,
+       #     "currency_id"=>"COP"]),
+       #    "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}"
+       #    ]
+       #  # @@gateway.create_preference(preferenceData)
+       #  @@gateway.post("/checkout/preferences?access_token=#{mpc.access_token}", preferenceData)
       rescue Exception => ex
         puts "$%$%$% Errer generate_checkout_payment_link #{ex.inspect}"
       end
