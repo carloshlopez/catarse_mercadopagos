@@ -6,9 +6,7 @@ module CatarseMercadopagos::Payment
     skip_before_filter :detect_locale, :only => [:notifications]
     skip_before_filter :set_locale, :only => [:notifications]
     skip_before_filter :force_http
-    
     before_filter :setup_gateway
-    
     SCOPE = "projects.contributions.checkout"
 
     layout :false
@@ -248,41 +246,43 @@ module CatarseMercadopagos::Payment
     end
 
     def generate_checkout_payment_link (contribution)
-      mpc = ::MercadoPagoClient.find_by_project_id(contribution.project.id)
-      # params = "grant_type=refresh_token&client_id=#{::Configuration[:mercadopagos_client_id]}&client_secret=#{::Configuration[:mercadopagos_client_secret]}&refresh_token=#{mpc.refresh_token}"
-      params = Hash["grant_type" => "refresh_token",
-        "client_id" => "#{::Configuration[:mercadopagos_client_id]}",
-        "client_secret" => "#{::Configuration[:mercadopagos_client_secret]}",
-        "refresh_token"=> "#{mpc.refresh_token}"]
-      resp = @@gateway.post("/oauth/token", params)
-      puts "%$%$ Respuesta es #{resp.inspect}"
-      mpc.access_token = resp['response']['access_token']
-      mpc.refresh_token = resp['response']['refresh_token']
-      mpc.save!
-       preferenceData = Hash["items" =>
-          Array(
-            Array["id"=>"sumame-proyect-#{contribution.project.id}-contribution-#{contribution.id}-user-#{current_user.id}",
-           "title"=>"Aporte a la campaña #{contribution.project.name} por #{contribution.value}",
-           "quantity"=>1,
-           "description" => "Esta transacción es por el aporte de #{current_user.name} a la campaña #{contribution.project.name} por un valor de #{contribution.value}",
-           "unit_price"=> contribution.value.to_f,
-           "currency_id"=>"COP"]),
-          "payer" =>{"name" => "CONT#{current_user.name}",
-                "surname" => "CONT#{current_user.full_name}",
-                "email" => "#{current_user.email}"
-                },
-          "back_urls" => {"success"=>"#{payment_success_mercadopagos_url(id: contribution.id)}",
-                          "pending"=>"#{payment_pending_mercadopagos_url(id: contribution.id)}",
-                          "failure"=>"#{payment_failure_mercadopagos_url(id: contribution.id)}"
-                         },
-          "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}",
-          "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}",
-          "access_token" => "#{mpc.access_token}"
-          ]
-        # mp = MercadoPago.new(mpc.access_token)
-        @@gateway.create_preference(preferenceData)
-
-
+      begin
+        mpc = ::MercadoPagoClient.find_by_project_id(contribution.project.id)
+        # params = "grant_type=refresh_token&client_id=#{::Configuration[:mercadopagos_client_id]}&client_secret=#{::Configuration[:mercadopagos_client_secret]}&refresh_token=#{mpc.refresh_token}"
+        params = Hash["grant_type" => "refresh_token",
+          "client_id" => "#{::Configuration[:mercadopagos_client_id]}",
+          "client_secret" => "#{::Configuration[:mercadopagos_client_secret]}",
+          "refresh_token"=> "#{mpc.refresh_token}"]
+        resp = @@gateway.post("/oauth/token", params)
+        puts "%$%$ Respuesta es #{resp.inspect}"
+        mpc.access_token = resp['response']['access_token']
+        mpc.refresh_token = resp['response']['refresh_token']
+        mpc.save!
+         preferenceData = Hash["items" =>
+            Array(
+              Array["id"=>"sumame-proyect-#{contribution.project.id}-contribution-#{contribution.id}-user-#{current_user.id}",
+             "title"=>"Aporte a la campaña #{contribution.project.name} por #{contribution.value}",
+             "quantity"=>1,
+             "description" => "Esta transacción es por el aporte de #{current_user.name} a la campaña #{contribution.project.name} por un valor de #{contribution.value}",
+             "unit_price"=> contribution.value.to_f,
+             "currency_id"=>"COP"]),
+            "payer" =>{"name" => "CONT#{current_user.name}",
+                  "surname" => "CONT#{current_user.full_name}",
+                  "email" => "#{current_user.email}"
+                  },
+            "back_urls" => {"success"=>"#{payment_success_mercadopagos_url(id: contribution.id)}",
+                            "pending"=>"#{payment_pending_mercadopagos_url(id: contribution.id)}",
+                            "failure"=>"#{payment_failure_mercadopagos_url(id: contribution.id)}"
+                           },
+            "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}",
+            "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}",
+            "access_token" => "#{mpc.access_token}"
+            ]
+          # mp = MercadoPago.new(mpc.access_token)
+          @@gateway.create_preference(preferenceData)
+      rescue Exception => ex
+        puts " $$$$$$$$4Error en generate_checkout_payment_link #{ex.inspect}"
+      end
     end
 
   end
