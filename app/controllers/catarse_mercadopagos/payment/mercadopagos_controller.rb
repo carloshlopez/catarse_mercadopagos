@@ -22,7 +22,7 @@ module CatarseMercadopagos::Payment
        @preference = generate_checkout_payment_link contribution
        puts "$%$%$ Preference created #{@preference.inspect}"
       rescue Exception => e
-        puts "####$$$$$$$$$$$$ %%%%   #{e.inspect}"
+        puts "Error en review ####$$$$$$$$$$$$ %%%%   #{e.inspect}"
       end
 
     end
@@ -269,13 +269,14 @@ module CatarseMercadopagos::Payment
            "currency_id"=>"COP"]),
           "payer" =>{"name" => "CONT#{current_user.name}",
                 "surname" => "CONT#{current_user.full_name}",
-                "email" => "#{current_user.email}"},
+                "email" => "#{current_user.email}"
+                },
           "back_urls" => {"success"=>"#{payment_success_mercadopagos_url(id: contribution.id)}",
                           "pending"=>"#{payment_pending_mercadopagos_url(id: contribution.id)}",
                           "failure"=>"#{payment_failure_mercadopagos_url(id: contribution.id)}"
                          },
           "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}",
-          "marketplace_fee" => contribution.value.to_f * ::Configuration[:catarse_fee]
+          "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}"
           ]
         # mp = MercadoPago.new(mpc.access_token)
         @@gateway.create_preference(preferenceData)
