@@ -268,10 +268,10 @@ module CatarseMercadopagos::Payment
            "description" => "Esta transacción es por el aporte de #{current_user.name} a la campaña #{contribution.project.name} por un valor de #{contribution.value}",
            "unit_price"=> contribution.value.to_f,
            "currency_id"=>"COP"]),
-          "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}",
-          "access_token" => "#{mpc.access_token}"
+          "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}"
           ]
-        @@gateway.create_preference(preferenceData)
+        # @@gateway.create_preference(preferenceData)
+        @@gateway.post("/checkout/preferences?access_token=#{mpc.access_token}", preferenceData)
       rescue Exception => ex
         puts "$%$%$% Errer generate_checkout_payment_link #{ex.inspect}"
       end
