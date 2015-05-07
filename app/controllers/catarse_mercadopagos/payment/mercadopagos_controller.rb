@@ -258,6 +258,7 @@ module CatarseMercadopagos::Payment
         mpc.access_token = resp['response']['access_token']
         mpc.refresh_token = resp['response']['refresh_token']
         mpc.save!
+        puts "Vamos a poner el fee de: #{(contribution.value.to_f * ::Configuration[:catarse_fee].to_f).to_f}"
          preferenceData = Hash["items" =>
             Array(
               Array["id"=>"sumame-proyect-#{contribution.project.id}-contribution-#{contribution.id}-user-#{current_user.id}",
@@ -275,7 +276,7 @@ module CatarseMercadopagos::Payment
                             "failure"=>"#{payment_failure_mercadopagos_url(id: contribution.id)}"
                            },
             "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}",
-            "marketplace_fee" => "(#{contribution.value.to_f * ::Configuration[:catarse_fee].to_f}).to_f",
+            "marketplace_fee" => "#{(contribution.value.to_f * ::Configuration[:catarse_fee].to_f).to_f}",
             "access_token" => "#{mpc.access_token}"
             ]
           # mp = MercadoPago.new(mpc.access_token)
