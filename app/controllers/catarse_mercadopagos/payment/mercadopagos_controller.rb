@@ -248,6 +248,7 @@ module CatarseMercadopagos::Payment
     end
 
     def generate_checkout_payment_link (contribution)
+      begin
       mpc = ::MercadoPagoClient.find_by_project_id(contribution.project.id)
       # params = "grant_type=refresh_token&client_id=#{::Configuration[:mercadopagos_client_id]}&client_secret=#{::Configuration[:mercadopagos_client_secret]}&refresh_token=#{mpc.refresh_token}"
       params = Hash["grant_type" => "refresh_token",
@@ -267,9 +268,13 @@ module CatarseMercadopagos::Payment
            "description" => "Esta transacción es por el aporte de #{current_user.name} a la campaña #{contribution.project.name} por un valor de #{contribution.value}",
            "unit_price"=> contribution.value.to_f,
            "currency_id"=>"COP"]),
-          "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}"
+          "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}",
+          "access_token" => "#{mpc.access_token}"
           ]
         @@gateway.create_preference(preferenceData)
+      rescue Exception => ex
+        puts "$%$%$% Errer generate_checkout_payment_link #{ex.inspect}"
+      end
 
 
     end
