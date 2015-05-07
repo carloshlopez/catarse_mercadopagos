@@ -275,7 +275,7 @@ module CatarseMercadopagos::Payment
                             "failure"=>"#{payment_failure_mercadopagos_url(id: contribution.id)}"
                            },
             "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}",
-            "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee]}",
+            "marketplace_fee" => "#{contribution.value.to_f * ::Configuration[:catarse_fee].to_f}",
             "access_token" => "#{mpc.access_token}"
             ]
           # mp = MercadoPago.new(mpc.access_token)
