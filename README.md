@@ -25,8 +25,10 @@ Create this configurations into Catarse database:
 
 In Rails console, run this:
 
-    Configuration.create!(name: "mercadopagos_client_secret", value: "111111") 
+    Configuration.create!(name: "mercadopagos_client_secret", value: "111111")
     Configuration.create!(name: "mercadopagos_client_id", value: "sdf4fs34442")
+
+You get this values from your user profile and app profile in mercadopagos
 
   Currencies:
     "COP" -> default

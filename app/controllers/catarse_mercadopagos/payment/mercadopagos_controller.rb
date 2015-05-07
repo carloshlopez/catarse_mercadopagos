@@ -20,6 +20,7 @@ module CatarseMercadopagos::Payment
         # Just to render the review form
        # @preference = generate_normal_payment_link
        @preference = generate_checkout_payment_link contribution
+       puts "$%$%$ Preference created #{@preference.inspect}"
       rescue Exception => e
         puts "####$$$$$$$$$$$$ %%%%   #{e.inspect}"
       end
@@ -248,8 +249,12 @@ module CatarseMercadopagos::Payment
 
     def generate_checkout_payment_link (contribution)
       mpc = ::MercadoPagoClient.find_by_project_id(contribution.project.id)
-      params = "grant_type=refresh_token&client_id=#{::Configuration[:mercadopagos_client_id]}&client_secret=#{::Configuration[:mercadopagos_client_secret]}&refresh_token=#{mpc.refresh_token}"
-      resp = @@gateway.get("/oauth/token", params)
+      # params = "grant_type=refresh_token&client_id=#{::Configuration[:mercadopagos_client_id]}&client_secret=#{::Configuration[:mercadopagos_client_secret]}&refresh_token=#{mpc.refresh_token}"
+      params = Hash["grant_type" => "refresh_token",
+        "client_id" => "#{Configuration[:mercadopagos_client_id]}",
+        "client_secret" => "#{Configuration[:mercadopagos_client_secret]}",
+        "refresh_token"=> "#{mpc.refresh_token}"]
+      resp = @@gateway.post("/oauth/token", params)
       puts "%$%$ Respuesta es #{resp.inspect}"
       mpc.access_token = resp['response']['access_token']
       mpc.refresh_token = resp['response']['refresh_token']
@@ -272,8 +277,8 @@ module CatarseMercadopagos::Payment
           "notification_url" => "#{payment_notifications_mercadopagos_url(id_conribution: contribution.id)}",
           "marketplace_fee" => contribution.value.to_f * ::Configuration[:catarse_fee]
           ]
-        mp = MercadoPago.new(mpc.access_token)
-        mp.create_preference(preferenceData)
+        # mp = MercadoPago.new(mpc.access_token)
+        @@gateway.create_preference(preferenceData)
 
 
     end
