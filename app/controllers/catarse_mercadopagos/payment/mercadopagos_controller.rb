@@ -119,19 +119,21 @@ module CatarseMercadopagos::Payment
         # searchResult = @@gateway.search_payment(filters)
         resp = @@gateway.get("/collections/notifications/#{params[:id]}", nil, true)
          puts "Resultados de buscar en mercadopagos #{resp.inspect} "
-        if resp["response"]["status"] == "approved"
+         resp_status = resp["response"]["collection"]["status"]
+         puts "Aquí debe estar el status #{resp_status}"
+        if resp_status == "approved"
           puts "******* FUE EXITOSO VAMOS A PROCESAR CON SUCCESS :)"
           proccess!(contribution, resp, "success")
           render status: 200, nothing: true
-        elsif resp["status"] == "rejected" or resp["status"] == "cancelled"
+        elsif resp_status == "rejected" or resp_status == "cancelled"
           puts "******* FUE FALLIDO VAMOS A PROCESAR CON FAILURE :)"
           proccess!(contribution, resp, "failure")
           render status: 200, nothing: true
-        elsif resp["status"] == "pending"
+        elsif resp_status == "pending"
           puts "******* FUE PENDING VAMOS A PROCESAR CON PENDING :)"
           proccess!(contribution, resp, "pending")
           render status: 200, nothing: true
-        elsif resp["status"] == "in_process"
+        elsif resp_status == "in_process"
           puts "******* FUE INCIERTO VAMOS A PROCESAR CON WAITING :)"
           proccess!(contribution, resp, "waiting")
           render status: 200, nothing: true
@@ -153,19 +155,20 @@ module CatarseMercadopagos::Payment
         # searchResult = @@gateway.search_payment(filters)
         resp = @@gateway.get("/collections/notifications/#{params[:id]}", nil, true)
          puts "Resultados de buscar en mercadopagos #{resp.inspect} "
-        if resp["response"]["status"] == "approved"
+         resp_status = resp["response"]["collection"]["status"]
+        if resp_status == "approved"
           puts "******* FUE EXITOSO VAMOS A PROCESAR CON SUCCESS :)"
           proccess!(contribution, resp, "success")
           render status: 200, nothing: true
-        elsif resp["status"] == "rejected" or resp["status"] == "cancelled"
+        elsif resp_status== "rejected" or resp_status == "cancelled"
           puts "******* FUE FALLIDO VAMOS A PROCESAR CON FAILURE :)"
           proccess!(contribution, resp, "failure")
           render status: 200, nothing: true
-        elsif resp["status"] == "pending"
+        elsif resp_status == "pending"
           puts "******* FUE PENDING VAMOS A PROCESAR CON PENDING :)"
           proccess!(contribution, resp, "pending")
           render status: 200, nothing: true
-        elsif resp["status"] == "in_process"
+        elsif resp_status == "in_process"
           puts "******* FUE INCIERTO VAMOS A PROCESAR CON WAITING :)"
           proccess!(contribution, resp, "waiting")
           render status: 200, nothing: true
