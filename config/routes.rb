@@ -1,6 +1,6 @@
 CatarseMercadopagos::Engine.routes.draw do
   namespace :payment do
-    get '/mercadopagos/:id_contribution/review' => 'mercadopagos#review', :as => 'review_mercadopagos'
+    get '/mercadopagos/:id/review' => 'mercadopagos#review', :as => 'review_mercadopagos'
     post '/mercadopagos/notifications' => 'mercadopagos#ipn',  :as => 'ipn_mercadopagos'
     get '/mercadopagos/notifications' => 'mercadopagos#ipn',  :as => 'ipn_mercadopagos_get'
     post '/mercadopagos/:id_contribution/notifications' => 'mercadopagos#notifications',  :as => 'notifications_mercadopagos'

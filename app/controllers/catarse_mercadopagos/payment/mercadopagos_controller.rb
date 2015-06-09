@@ -13,7 +13,7 @@ module CatarseMercadopagos::Payment
 
     def review
       begin
-        contribution = ::Contribution.find(params[:id_conribution])
+        contribution = ::Contribution.find(params[:id])
         # Just to render the review form
        # @preference = generate_normal_payment_link
        @preference = generate_checkout_payment_link contribution
