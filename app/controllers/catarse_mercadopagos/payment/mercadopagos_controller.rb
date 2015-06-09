@@ -59,7 +59,7 @@ module CatarseMercadopagos::Payment
           contribution.update_attribute :payment_method, 'Mercadopagos'
           contribution.update_attribute :payment_token, params[:preference_id]
 
-          proccess!(contribution, preference, "pending")
+          proccess!(contribution, preference, "pendent")
           mercadopagos_error "La transacción no pudo ser confirmada con Mercadopagos"
           redirect_to main_app.new_project_contribution_path(contribution.project)
         elsif params[:collection_status] == "in_process"
@@ -119,7 +119,7 @@ module CatarseMercadopagos::Payment
 
         # filters = Array["id"=>params[:id].to_i, "site_id"=>"MCO"]
         # searchResult = @@gateway.search_payment(filters)
-        resp = @@gateway.get("/collections/#{params[:id]}", nil, true)
+        resp = @@gateway.get("/collections/notifications/#{params[:id]}", nil, true)
          puts "Resultados de buscar en mercadopagos #{resp.inspect} "
         if resp["response"]["status"] == "approved"
           puts "******* FUE EXITOSO VAMOS A PROCESAR CON SUCCESS :)"
