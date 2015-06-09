@@ -13,8 +13,7 @@ module CatarseMercadopagos::Payment
 
     def review
       begin
-        # contribution = current_user.backs.not_confirmed.find params[:id]
-        contribution = ::Contribution.find(params[:id])
+        contribution = ::Contribution.find(params[:id_conribution])
         # Just to render the review form
        # @preference = generate_normal_payment_link
        @preference = generate_checkout_payment_link contribution
@@ -27,7 +26,7 @@ module CatarseMercadopagos::Payment
 
     def success
       begin
-        contribution = ::Contribution.find(params[:id])
+        contribution = ::Contribution.find(params[:id_conribution])
         preference = @@gateway.get_preference(params[:preference_id])
         puts "si existe la preference aquí esta #{preference}"
         if params[:collection_status] == "approved"
@@ -52,7 +51,7 @@ module CatarseMercadopagos::Payment
 
     def pending
       begin
-        contribution = ::Contribution.find(params[:id])
+        contribution = ::Contribution.find(params[:id_conribution])
         preference = @@gateway.get_preference(params[:preference_id])
         puts "si existe la preference aquí esta #{preference}"
         if params[:collection_status] == "pending"
@@ -83,7 +82,7 @@ module CatarseMercadopagos::Payment
 
     def failure
       begin
-        contribution = ::Contribution.find(params[:id])
+        contribution = ::Contribution.find(params[:id_conribution])
         preference = @@gateway.get_preference(params[:preference_id])
         puts "si existe la preference aquí esta #{preference}"
         if params[:collection_status] == "failure"
@@ -114,7 +113,6 @@ module CatarseMercadopagos::Payment
 
     def notifications
       begin
-        # contribution = current_user.backs.find params[:id]
         contribution = ::Contribution.find(params[:id_conribution])
 
         # filters = Array["id"=>params[:id].to_i, "site_id"=>"MCO"]
@@ -148,7 +146,6 @@ module CatarseMercadopagos::Payment
     end
 
     def ipn
-        # contribution = current_user.backs.find params[:id]
         contribution = ::Contribution.find(params[:id_conribution])
 
         # filters = Array["id"=>params[:id].to_i, "site_id"=>"MCO"]
