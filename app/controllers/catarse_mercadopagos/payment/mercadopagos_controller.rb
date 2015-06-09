@@ -13,7 +13,7 @@ module CatarseMercadopagos::Payment
 
     def review
       begin
-        contribution = ::Contribution.find(params[:id])
+        contribution = ::Contribution.find(params[:id_contribution])
         # Just to render the review form
        # @preference = generate_normal_payment_link
        @preference = generate_checkout_payment_link contribution
@@ -26,7 +26,7 @@ module CatarseMercadopagos::Payment
 
     def success
       begin
-        contribution = ::Contribution.find(params[:id_conribution])
+        contribution = ::Contribution.find(params[:id_contribution])
         preference = @@gateway.get_preference(params[:preference_id])
         puts "si existe la preference aquí esta #{preference}"
         if params[:collection_status] == "approved"
@@ -51,7 +51,7 @@ module CatarseMercadopagos::Payment
 
     def pending
       begin
-        contribution = ::Contribution.find(params[:id_conribution])
+        contribution = ::Contribution.find(params[:id_contribution])
         preference = @@gateway.get_preference(params[:preference_id])
         puts "si existe la preference aquí esta #{preference}"
         if params[:collection_status] == "pending"
@@ -82,7 +82,7 @@ module CatarseMercadopagos::Payment
 
     def failure
       begin
-        contribution = ::Contribution.find(params[:id_conribution])
+        contribution = ::Contribution.find(params[:id_contribution])
         preference = @@gateway.get_preference(params[:preference_id])
         puts "si existe la preference aquí esta #{preference}"
         if params[:collection_status] == "failure"
@@ -113,7 +113,7 @@ module CatarseMercadopagos::Payment
 
     def notifications
       begin
-        contribution = ::Contribution.find(params[:id_conribution])
+        contribution = ::Contribution.find(params[:id_contribution])
 
         # filters = Array["id"=>params[:id].to_i, "site_id"=>"MCO"]
         # searchResult = @@gateway.search_payment(filters)
@@ -149,7 +149,7 @@ module CatarseMercadopagos::Payment
 
     def ipn
       begin
-        contribution = ::Contribution.find(params[:id_conribution])
+        contribution = ::Contribution.find(params[:id_contribution])
 
         # filters = Array["id"=>params[:id].to_i, "site_id"=>"MCO"]
         # searchResult = @@gateway.search_payment(filters)
