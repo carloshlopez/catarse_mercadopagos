@@ -1,8 +1,11 @@
 / = javascript_include_tag 'catarse_paypal_express'
 
 / h3= t('projects.backers.review.international.section_title')
-h3 Paga de una manera segura con:
-=image_tag "http://upload.wikimedia.org/wikipedia/commons/b/b2/MercadoPago.png", :height=> "70px"
-p
-  = link_to "APOYA A TRAVÉS DE MERCADO PAGO", @preference['response']['init_point'], :name => "MP-Checkout", :style=> "padding:10px;background-color: #4CC5D7;color: #fff;border-radius: 10px;cursor: pointer; margin:15px;text-decoration:none", :title=>"Apoya haciendo click aquí"
-script src="https://www.mercadopago.com/org-img/jsapi/mptools/buttons/render.js" type="text/javascript"
+- if @show == true
+  h3 Paga de una manera segura con:
+  =image_tag "http://upload.wikimedia.org/wikipedia/commons/b/b2/MercadoPago.png", :height=> "70px"
+  p
+    = link_to "APOYA A TRAVÉS DE MERCADO PAGO", @preference['response']['init_point'], :name => "MP-Checkout", :style=> "padding:10px;background-color: #4CC5D7;color: #fff;border-radius: 10px;cursor: pointer; margin:15px;text-decoration:none", :title=>"Apoya haciendo click aquí"
+  script src="https://www.mercadopago.com/org-img/jsapi/mptools/buttons/render.js" type="text/javascript"
+- else
+  p Este proyecto no acepta contribuciones por Mercado Pago.

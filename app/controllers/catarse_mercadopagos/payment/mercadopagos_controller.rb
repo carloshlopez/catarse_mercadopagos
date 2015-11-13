@@ -16,8 +16,14 @@ module CatarseMercadopagos::Payment
         contribution = ::Contribution.find(params[:id_contribution])
         # Just to render the review form
        # @preference = generate_normal_payment_link
-       @preference = generate_checkout_payment_link contribution
-       puts "$%$%$ Preference created #{@preference.inspect}"
+        @show = true
+        if contribution.project.accepts_mercadopago?
+          @preference = generate_checkout_payment_link contribution
+          puts "$%$%$ Preference created #{@preference.inspect}"
+        else
+          @show = false  
+          puts "$%$%$ No acepta mercadopagos"
+        end
       rescue Exception => e
         puts "Error en review ####$$$$$$$$$$$$ %%%%   #{e.inspect}"
       end
