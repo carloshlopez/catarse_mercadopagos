@@ -310,13 +310,15 @@ module CatarseMercadopagos::Payment
             "marketplace_fee" => fee,
             "access_token" => "#{mpc.access_token}"
             ]
+          # preference2 = @@gateway.create_preference(preferenceData)
+          # puts "preference2 #{preference2.inspect}"
+          # preference2 
           puts "Crear mercado pago con access_token: #{mpc.access_token}"  
           mp = MercadoPago.new(mpc.access_token)
           preference = mp.create_preference(preferenceData)
           puts "preference como debería ser #{preference.inspect}"
-          preference2 = @@gateway.create_preference(preferenceData)
-          puts "preference2 #{preference2.inspect}"
-          preference2
+          preference
+         
       rescue Exception => ex
         puts " $$$$$$$$4Error en generate_checkout_payment_link #{ex.inspect}"
       end
