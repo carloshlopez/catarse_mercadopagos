@@ -27,6 +27,9 @@ In Rails console, run this:
 
     Configuration.create!(name: "mercadopagos_client_secret", value: "111111")
     Configuration.create!(name: "mercadopagos_client_id", value: "sdf4fs34442")
+    Add configuration for using Mercado Pagos checkout functionality
+    Configuration.create!(name: "mercadopagos_use_checkout", value: "true")
+    Configuration.create!(name: "mercadopago_checkout_fee", value: "0.06")
 
 You get this values from your user profile and app profile in mercadopagos
 

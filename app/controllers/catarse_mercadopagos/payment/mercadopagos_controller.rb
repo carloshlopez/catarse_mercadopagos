@@ -15,10 +15,13 @@ module CatarseMercadopagos::Payment
       begin
         contribution = ::Contribution.find(params[:id_contribution])
         # Just to render the review form
-       # @preference = generate_normal_payment_link
         @show = true
         if contribution.project.accepts_mercadopago?
-          @preference = generate_checkout_payment_link contribution
+          if ::Configuration[:mercadopagos_use_checkout] == "true"
+            @preference = generate_checkout_payment_link contribution
+          else
+            @preference = generate_normal_payment_link
+          end
           puts "$%$%$ Preference created #{@preference.inspect}"
         else
           @show = false  
@@ -288,7 +291,7 @@ module CatarseMercadopagos::Payment
         mpc.access_token = resp['response']['access_token']
         mpc.refresh_token = resp['response']['refresh_token']
         mpc.save!
-        fee = (contribution.value.to_f * ::Configuration[:catarse_fee].to_f).to_f
+        fee = (contribution.value.to_f * ::Configuration[:mercadopago_checkout_fee].to_f).to_f
         puts "Vamos a poner el fee de: #{fee}"
          preferenceData = Hash["items" =>
             Array(
