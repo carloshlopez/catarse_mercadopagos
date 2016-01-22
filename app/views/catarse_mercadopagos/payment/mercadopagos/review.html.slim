@@ -7,7 +7,7 @@
 
   - if request.original_url.include?("sumame-test") or request.original_url.include?("localhost")
     p
-	  = link_to "APOYA A TRAVÉS DE MERCADO PAGO", @preference['response']['sandbox_init_point'], :name => "MP-Checkout", :style=> "padding:10px;background-color: #4CC5D7;color: #fff;border-radius: 10px;cursor: pointer; margin:15px;text-decoration:none", :title=>"Apoya haciendo click aquí"
+	  = link_to "APOYA POR MERCADO PAGO", @preference['response']['sandbox_init_point'], :name => "MP-Checkout", :style=> "padding:10px;background-color: #4CC5D7;color: #fff;border-radius: 10px;cursor: pointer; margin:15px;text-decoration:none", :title=>"Apoya haciendo click aquí"
 	  script src="https://www.mercadopago.com/org-img/jsapi/mptools/buttons/render.js" type="text/javascript"
   - else
     p
